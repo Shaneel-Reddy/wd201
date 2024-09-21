@@ -2,7 +2,7 @@
 
 const todoList = require("../todo");
 
-const { all, markAsComplete, add } = todoList();
+const { all, markAsComplete, add, overdue, dueToday, dueLater } = todoList();
 
 describe("Todolist Test Suite", () => {
   beforeAll(() => {
@@ -37,7 +37,7 @@ describe("Todolist Test Suite", () => {
     });
     const overdueitems = overdue();
     expect(overdueitems.length).toBe(1);
-    expect(overdueitems[0].title).toBe("Overdue todo");
+    expect(overdueitems[0].title).toBe("Overdue Test todo");
   });
 
   test("Should retrieve due today items", () => {
@@ -54,6 +54,6 @@ describe("Todolist Test Suite", () => {
     });
     const dueLaterItems = dueLater();
     expect(dueLaterItems.length).toBe(1);
-    expect(dueLaterItems[0].title).toBe("Due later todo");
+    expect(dueLaterItems[0].title).toBe("Due later test todo");
   });
 });
