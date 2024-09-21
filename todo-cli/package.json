@@ -7,11 +7,11 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-  "/*.js": [
-    "eslint --fix",
-    "prettier --write"
-  ]
-},
+    "*.js": [
+      "eslint",
+      "prettier --write ."
+    ]
+  },
   "author": "",
   "license": "ISC",
   "description": "",
