@@ -9,7 +9,7 @@ describe("Todolist Test Suite", () => {
     add({
       title: "new todo",
       completed: false,
-      dueDate: new Date().toISOString(),
+      dueDate: new Date().toISOString().split("T")[0],
     });
   });
 
@@ -18,7 +18,7 @@ describe("Todolist Test Suite", () => {
     add({
       title: "Test todo",
       completed: false,
-      dueDate: new Date().toISOString(),
+      dueDate: new Date().toISOString().split("T")[0],
     });
     expect(all.length).toBe(todoItemsCount + 1);
   });
@@ -27,5 +27,33 @@ describe("Todolist Test Suite", () => {
     expect(all[0].completed).toBe(false);
     markAsComplete(0);
     expect(all[0].completed).toBe(true);
+  });
+
+  test("Should retrieve overdue items", () => {
+    add({
+      title: "Overdue Test todo",
+      completed: false,
+      dueDate: "2023-05-02",
+    });
+    const overdueitems = overdue();
+    expect(overdueitems.length).toBe(1);
+    expect(overdueitems[0].title).toBe("Overdue todo");
+  });
+
+  test("Should retrieve due today items", () => {
+    const todayItems = dueToday();
+    expect(todayItems.length).toBeGreaterThan(0);
+    expect(todayItems[0].dueDate).toBe(new Date().toISOString().split("T")[0]);
+  });
+
+  test("Should retrieve due later items", () => {
+    add({
+      title: "Due later test todo",
+      completed: false,
+      dueDate: "2100-01-01",
+    });
+    const dueLaterItems = dueLater();
+    expect(dueLaterItems.length).toBe(1);
+    expect(dueLaterItems[0].title).toBe("Due later todo");
   });
 });
