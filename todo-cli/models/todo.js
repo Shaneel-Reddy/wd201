@@ -46,7 +46,6 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [Op.lt]: new Date().toISOString().split("T")[0],
           },
-          completed: false,
         },
       });
     }
@@ -58,7 +57,6 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [Op.eq]: new Date().toISOString().split("T")[0],
           },
-          completed: false,
         },
       });
     }
@@ -70,7 +68,6 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [Op.gt]: new Date().toISOString().split("T")[0],
           },
-          completed: false,
         },
       });
     }
@@ -87,11 +84,9 @@ module.exports = (sequelize, DataTypes) => {
     displayableString() {
       const checkbox = this.completed ? "[x]" : "[ ]";
       const today = new Date().toISOString().split("T")[0];
-      let OverDuetodo = this.dueDate > todaydate;
+
       if (this.dueDate === today) {
         return `${this.id}. ${checkbox} ${this.title}`;
-      } else if (this.completed && OverDuetodo) {
-        return `${this.id}. [x] ${this.title} ${this.dueDate}`;
       } else {
         return `${this.id}. ${checkbox} ${this.title} ${this.dueDate}`;
       }
