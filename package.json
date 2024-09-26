@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "minimist": "^1.2.8"
+  },
+  "devDependencies": {
+    "husky": "^9.1.6"
   }
 }
