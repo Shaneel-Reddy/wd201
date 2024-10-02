@@ -6,16 +6,35 @@ const { Todo } = require("./models");
 const path = require("path");
 
 app.set("view engine", "ejs");
+
 app.get("/", async (request, response) => {
-  const allTodos = await Todo.getTodos();
-  if (request.accepts("html")) {
-    response.render("index", {
-      allTodos,
-    });
-  } else {
-    response.json({
-      allTodos,
-    });
+  try {
+    const today = new Date().toISOString().split("T")[0];
+    const allTodos = await Todo.getTodos();
+    const overdueTodos = allTodos.filter(
+      (todo) => todo.dueDate < today && !todo.completed,
+    );
+    const dueTodayTodos = allTodos.filter(
+      (todo) => todo.dueDate === today && !todo.completed,
+    );
+    const dueLaterTodos = allTodos.filter(
+      (todo) => todo.dueDate > today && !todo.completed,
+    );
+
+    if (request.accepts("html")) {
+      response.render("index", {
+        overdueTodos,
+        dueTodayTodos,
+        dueLaterTodos,
+      });
+    } else {
+      response.json({
+        allTodos,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(500).send("Internal Server Error");
   }
 });
 // eslint-disable-next-line no-undef
