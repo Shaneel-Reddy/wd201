@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -5,8 +6,13 @@ app.use(bodyParser.json());
 const { Todo } = require("./models");
 const path = require("path");
 
+var csrf = require("csurf");
+var cookieParser = require("cookie-parser");
+const csrfProtection = csrf({ cookie: true });
+app.use(cookieParser());
+app.use(csrf({ cookie: true }));
+app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
-app.use(express.urlencoded({ extended: false }));
 
 app.get("/", async (request, response) => {
   try {
@@ -27,10 +33,13 @@ app.get("/", async (request, response) => {
         overdueTodos,
         dueTodayTodos,
         dueLaterTodos,
+        csrfToken: request.csrfToken(),
       });
     } else {
       response.json({
-        allTodos,
+        overdueTodos,
+        dueTodayTodos,
+        dueLaterTodos,
       });
     }
   } catch (error) {
@@ -51,7 +60,7 @@ app.get("/todos", async (request, response) => {
     return response.status(422).json(error);
   }
 });
-app.post("/todos", async (request, response) => {
+app.post("/todos", csrfProtection, async (request, response) => {
   console.log("Create a Todo List", request.body);
   try {
     await Todo.addTodo({
@@ -80,8 +89,8 @@ app.put("/todos/:id/markascompleted", async (request, response) => {
 app.delete("/todos/:id", async (request, response) => {
   console.log("Deleting a Todo List", request.params.id);
   try {
-    const deleted = await Todo.destroy({ where: { id: request.params.id } });
-    return response.json(deleted ? true : false);
+    await Todo.remove(request.params.id);
+    return response.json({ sucess: true });
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
