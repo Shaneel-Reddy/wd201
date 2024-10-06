@@ -10,7 +10,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
         async function updatetodo(id){
         fetch(`/todos/${id}/markascompleted`,{
             method:"PUT",
@@ -48,7 +47,7 @@
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %>
-        <form action="/todos" method="POST" >
+        <form action="/todos" method="post" >
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
             <div class="flex gap-2 py-4">
