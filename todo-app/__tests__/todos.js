@@ -24,6 +24,7 @@ describe("Todo test suite", () => {
   test("responds with json at /todos", async () => {
     const res = await agent.get("/");
     const csrfToken = extractCsrfToken(res);
+    expect(csrfToken).toBeDefined();
     const response = await agent.post("/todos").send({
       title: "Buy milk",
       dueDate: new Date().toISOString(),
