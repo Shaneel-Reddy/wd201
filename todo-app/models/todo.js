@@ -27,6 +27,9 @@ module.exports = (sequelize, DataTypes) => {
     markAsCompleted() {
       return this.update({ completed: true });
     }
+    static async setCompletionStatus(id, completed) {
+      return this.update({ completed }, { where: { id } });
+    }
   }
   Todo.init(
     {

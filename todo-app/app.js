@@ -26,11 +26,13 @@ app.get("/", async (request, response) => {
     const dueLaterTodos = allTodos.filter(
       (todo) => todo.dueDate > today && !todo.completed,
     );
+    const completedTodos = allTodos.filter((todo) => todo.completed);
     if (request.accepts("html")) {
       response.render("index", {
         overdueTodos,
         dueTodayTodos,
         dueLaterTodos,
+        completedTodos,
         csrfToken: request.csrfToken(),
       });
     } else {
@@ -57,10 +59,17 @@ app.get("/", async (request, response) => {
 //   }
 // });
 app.post("/todos", async (request, response) => {
+  const { title, dueDate } = request.body;
+
+  if (!title || !title.trim() || !dueDate) {
+    return response
+      .status(422)
+      .json({ error: "Title and due date are required." });
+  }
   try {
     await Todo.addTodo({
-      title: request.body.title,
-      dueDate: request.body.dueDate,
+      title: title.trim(),
+      dueDate: dueDate,
       completed: false,
     });
     return response.redirect("/");
@@ -69,12 +78,16 @@ app.post("/todos", async (request, response) => {
     return response.status(422).json({ error: error.message });
   }
 });
-app.put("/todos/:id/markascompleted", async (request, response) => {
-  console.log("Updating a Todo List", request.params.id);
-  const todo = await Todo.findByPk(request.params.id);
+app.put("/todos/:id", async (request, response) => {
+  const { completed } = request.body;
+  const { id } = request.params;
   try {
-    const updatedtodo = await todo.markAsCompleted();
-    return response.json(updatedtodo);
+    const updatedTodo = await Todo.setCompletionStatus(id, completed);
+    if (!updatedTodo) {
+      return response.status(404).send("Todo not found");
+    }
+    const todo = await Todo.findByPk(id);
+    return response.json(todo);
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);

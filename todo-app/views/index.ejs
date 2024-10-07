@@ -10,12 +10,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        async function updatetodo(id){
-        fetch(`/todos/${id}/markascompleted`,{
+        async function updatetodo(id,status){
+        fetch(`/todos/${id}`,{
             method:"PUT",
             headers:{"Content-Type":"application/json"},
             body: JSON.stringify({
-                 _csrf: csrfToken, 
+                completed:!status,
+                _csrf: csrfToken, 
             }),
         })
         .then((res)=>{
@@ -40,6 +41,17 @@
         })
         .catch((err)=>console.error(err));
         }
+        function validateform()
+        {
+            const title=document.querySelector('input[name="title"]').value;
+            const dueDate=document.querySelector('input[name="dueDate"]').value;
+            if(!title.trim() || !dueDate)
+            {
+                alert("Title and DueDate cannot be empty");
+                return false;
+            }
+            return true;
+        }
         </script>
     <title>To-Do</title>
 </head>
@@ -47,7 +59,7 @@
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %>
-        <form action="/todos" method="post" >
+        <form action="/todos" method="post" onsubmit="return validateform()">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
             <div class="flex gap-2 py-4">
@@ -62,7 +74,7 @@
                 </div>
             </div>
         </form>
-        <%- include('todos.ejs', { overdueTodos, dueTodayTodos, dueLaterTodos }) %>
+        <%- include('todos.ejs', { overdueTodos, dueTodayTodos, dueLaterTodos, completedTodos }) %>
 
         </div>
     </div>

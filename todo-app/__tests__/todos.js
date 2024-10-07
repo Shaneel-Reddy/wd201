@@ -54,12 +54,13 @@ describe("Todo test suite", () => {
     res = await agent.get("/");
     csrfToken = extractCsrfToken(res);
     const markCompleteResponse = await agent
-      .put(`/todos/${latestTodo.id}/markAsCompleted`)
+      .put(`/todos/${latestTodo.id}`)
       .send({
         _csrf: csrfToken,
+        completed: true,
       });
     const parsedUpdateResponse = JSON.parse(markCompleteResponse.text);
-    expect(parsedUpdateResponse.completed).toBe(true);
+    expect(parsedUpdateResponse.completed).toBe(!latestTodo.completed);
   });
   //   test("Delete a Todo", async () => {
   //     const response = await agent.post("/todos").send({
