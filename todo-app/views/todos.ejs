@@ -5,7 +5,7 @@
     </div>
     <ul class="list-none">
         <% overdueTodos.forEach(todo => { %>
-            <li class="Todo-item">
+            <li class="Todo-Item">
                 <div class="flex items-center w-fit my-2 px-2 py-1 rounded hover:bg-purple-50">
                     <input id="todo-checkbox-<%= todo.id %>" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300" <% if (todo.completed) { %> checked <% } %> onclick="updatetodo(<%=todo.id%>,<%= todo.completed %>)" />
                     <label for="todo-checkbox-<%= todo.id %>" class="ml-2 text-sm text-gray-600 cursor-pointer"><%= todo.title %></label>
@@ -25,7 +25,7 @@
     </div>
     <ul class="list-none">
         <% dueTodayTodos.forEach(todo => { %>
-            <li class="Todo-item">
+            <li class="Todo-Item">
                 <div class="flex items-center w-fit my-2 px-2 py-1 rounded hover:bg-purple-50">
                     <input id="todo-checkbox-<%= todo.id %>" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300" <% if (todo.completed) { %> checked <% } %> onclick="updatetodo(<%=todo.id%>,<%= todo.completed %>)"/>
                     <label for="todo-checkbox-<%= todo.id %>" class="ml-2 text-sm text-gray-600 cursor-pointer"><%= todo.title %></label>
@@ -45,7 +45,7 @@
     </div>
     <ul class="list-none">
         <% dueLaterTodos.forEach(todo => { %>
-            <li class="Todo-item">
+            <li class="Todo-Item">
                 <div class="flex items-center w-fit my-2 px-2 py-1 rounded hover:bg-purple-50">
                     <input id="todo-checkbox-<%= todo.id %>" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300" <% if (todo.completed) { %> checked <% } %> onclick="updatetodo(<%=todo.id%>,<%= todo.completed %>)"/>
                     <label for="todo-checkbox-<%= todo.id %>" class="ml-2 text-sm text-gray-600 cursor-pointer"><%= todo.title %></label>
@@ -65,7 +65,7 @@
     </div>
     <ul class="list-none">
         <% completedTodos.forEach(todo=>{ %>
-        <li class="Todo-item">
+        <li class="Todo-Item">
             <div class="flex items-center w-fit my-2 px-2 py-1 rounded hover:bg-purple-50">
                 <input id="todo-checkbox-<%= todo.id %>" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300" <% if (todo.completed) { %> checked <% } %> onclick="updatetodo(<%=todo.id%>,<%= todo.completed %>)"/>
                 <label for="todo-checkbox-<%= todo.id %>" class="ml-2 text-sm text-gray-600 cursor-pointer"><%= todo.title %></label>
