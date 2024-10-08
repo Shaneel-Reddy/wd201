@@ -98,7 +98,7 @@ app.delete("/todos/:id", async (request, response) => {
   console.log("Deleting a Todo List", request.params.id);
   try {
     await Todo.remove(request.params.id);
-    return response.json({ sucess: true });
+    return response.json({ success: true });
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
