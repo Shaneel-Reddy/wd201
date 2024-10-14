@@ -1,85 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="<%= csrfToken %>">
-
-
-    <link href="/css/styles.css" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo-Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        async function updatetodo(id,status){
-        fetch(`/todos/${id}`,{
-            method:"PUT",
-            headers:{"Content-Type":"application/json"},
-            body: JSON.stringify({
-                completed:!status,
-                _csrf: csrfToken, 
-            }),
-        })
-        .then((res)=>{
-            if(res.ok){
-                window.location.reload();
-            }
-        })
-        .catch((err)=>console.error(err));
-        }
-        function deletetodo(id){
-        fetch(`/todos/${id}`,{
-            method:"DELETE",
-            headers:{"Content-Type":"application/json"},
-            body: JSON.stringify({
-                 _csrf: csrfToken, 
-            }),
-        })
-        .then((res)=>{
-            if(res.ok){
-                window.location.reload();
-            }
-        })
-        .catch((err)=>console.error(err));
-        }
-        function validateform()
-        {
-            const title=document.querySelector('input[name="title"]').value;
-            const dueDate=document.querySelector('input[name="dueDate"]').value;
-            if(!title.trim() || !dueDate)
-            {
-                alert("Title and DueDate cannot be empty");
-                return false;
-            }
-            return true;
-        }
-        </script>
-    <title>To-Do</title>
-</head>
-<body>
-    <div class="grid grid-cols-6">
-        <div class="col-start-3 col-span-2">
-            <%- include('header.ejs') %>
-        <form action="/todos" method="post" onsubmit="return validateform()">
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
 
-            <div class="flex gap-2 py-4">
-                <div class="flex-auto">
-                    <input type="text" name="title" placeholder="what's next" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm" required/>    
-                </div>
-                <div class="flex-auto">
-                    <input type="date" name="dueDate" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm leading-4" required/>
-                </div>
-                <div class="flex-none">
-                    <button type="submit"  class="bg-green-500 text-white px-5 py-1.5 rounded font-medium mr-2 mb-2">Add</button>
-                </div>
-            </div>
-        </form>
-        <%- include('todos.ejs', { overdueTodos, dueTodayTodos, dueLaterTodos, completedTodos }) %>
-
-        </div>
+  <body>
+    <div class="flex justify-center">
+      <div class="grid grid-cols-6 w-full max-w-4xl">
+        <div class="col-start-3 col-span-3"><%- include('header.ejs') %></div>
+        <div class="col-start-2 col-span-3"><%- include('todos.ejs') %></div>
+      </div>
     </div>
-    
-    
-
-</body>
+    <%- include('footer.ejs') %>
+  </body>
 </html>
